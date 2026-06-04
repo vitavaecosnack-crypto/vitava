@@ -14,17 +14,19 @@
     }
 
     body{
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(135deg, #dff7e2, #ffffff);
-      min-height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      overflow:hidden;
-      position:relative;
-    }
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #dff7e2, #ffffff);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  overflow-x:hidden;
+  overflow-y:auto;
+  position:relative;
+  padding:40px 0;
+}
 
-    /* Fondo animado */
+    /* el papu fondo animado */
 
     body::before{
       content:"";
@@ -69,18 +71,19 @@
     }
 
     .container{
-      width:90%;
-      max-width:720px;
-      background:white;
-      padding:45px;
-      border-radius:28px;
-      box-shadow:0 12px 35px rgba(0,0,0,0.15);
-      text-align:center;
-      position:relative;
-      z-index:2;
+  width:90%;
+  max-width:720px;
+  background:white;
+  padding:45px;
+  border-radius:28px;
+  box-shadow:0 12px 35px rgba(0,0,0,0.15);
+  text-align:center;
+  position:relative;
+  z-index:2;
+  margin:0 auto 40px;
 
-      animation: aparecer 1.2s ease;
-    }
+  animation: aparecer 1.2s ease;
+}
 
     @keyframes aparecer{
       from{
@@ -183,13 +186,14 @@
       color:white;
     }
 
-    .footer{
-      margin-top:30px;
-      color:#777;
-      font-size:14px;
-    }
+   .footer{
+  margin-top:30px;
+  color:#777;
+  font-size:14px;
+  padding-bottom:10px;
+}
 
-    /* Media Queries - Responsividad móvil */
+    /* Responsividad móvil */
 
     @media (max-width: 768px) {
       .container {
