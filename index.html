@@ -2,302 +2,1051 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vitava EcoSnack</title>
-
   <style>
-    *{
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root{
+      --bg1:#dff7e2;
+      --bg2:#ffffff;
+      --ink:#5a2818;
+      --ink-soft:#6d4a39;
+      --green:#43a047;
+      --teal:#00897b;
+      --amber:#f9a825;
+      --red:#d32f2f;
+      --violet:#833ab4;
+      --card:#ffffffd9;
+      --shadow:0 14px 40px rgba(0,0,0,.14);
+      --radius:28px;
+      --heading-font: Georgia, 'Times New Roman', serif;
+      --body-font: Arial, Helvetica, sans-serif;
+      --accent-font: 'Trebuchet MS', 'Segoe UI', sans-serif;
     }
 
+    *{ box-sizing:border-box; margin:0; padding:0; }
+    html{ scroll-behavior:smooth; }
     body{
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(135deg, #dff7e2, #ffffff);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      overflow-x: hidden;
-      overflow-y: auto;
-      position: relative;
-      padding: 40px 16px;
+      font-family: var(--body-font);
+      color:var(--ink);
+      background: linear-gradient(135deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      overflow-x:auto;
+      overflow-y:auto;
+      padding:18px 12px 40px;
+      position:relative;
     }
 
-    /* Fondo animado */
-    body::before{
-      content: "";
-      position: absolute;
-      width: 700px;
-      height: 700px;
-      background: rgba(76,175,80,0.12);
-      border-radius: 50%;
-      top: -250px;
-      left: -250px;
-      animation: mover1 10s infinite alternate ease-in-out;
-    }
-
+    body::before,
     body::after{
-      content: "";
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      background: rgba(0,150,136,0.12);
-      border-radius: 50%;
-      bottom: -220px;
-      right: -220px;
-      animation: mover2 12s infinite alternate ease-in-out;
+      content:"";
+      position:fixed;
+      border-radius:50%;
+      pointer-events:none;
+      z-index:0;
+      animation: drift 12s infinite alternate ease-in-out;
+      opacity:.95;
+    }
+    body::before{
+      width:720px; height:720px;
+      background:rgba(76,175,80,.12);
+      top:-280px; left:-260px;
+      animation-duration:11s;
+    }
+    body::after{
+      width:620px; height:620px;
+      background:rgba(0,150,136,.12);
+      bottom:-260px; right:-220px;
+      animation-duration:13s;
     }
 
-    @keyframes mover1{
-      from{ transform: translateY(0px) translateX(0px); }
-      to{ transform: translateY(40px) translateX(30px); }
+    @keyframes drift{
+      from{ transform:translate3d(0,0,0) scale(1); }
+      to{ transform:translate3d(24px, 36px, 0) scale(1.05); }
     }
 
-    @keyframes mover2{
-      from{ transform: translateY(0px) translateX(0px); }
-      to{ transform: translateY(-40px) translateX(-30px); }
+    .page{
+      position:relative;
+      z-index:1;
+      width:min(1120px, 100%);
+      margin:0 auto;
     }
 
-    .container{
-      width: 100%;
-      max-width: 720px;
-      background: white;
-      padding: 45px;
-      border-radius: 28px;
-      box-shadow: 0 12px 35px rgba(0,0,0,0.15);
-      text-align: center;
-      position: relative;
-      z-index: 2;
-      margin: 0 auto 20px;
-      animation: aparecer 1.2s ease;
+    .section{
+      width:100%;
+      border-radius:calc(var(--radius) + 4px);
+      overflow:visible;
+      box-shadow:var(--shadow);
+      background:var(--card);
+      backdrop-filter: blur(8px);
+      border:1px solid rgba(255,255,255,.55);
+      margin-bottom:24px;
     }
 
-    @keyframes aparecer{
+    .hero{
+      padding:26px;
+    }
+
+    .hero-top{
+      display:grid;
+      grid-template-columns:1fr 350px;
+      gap:28px;
+      align-items:flex-start;
+      margin-bottom:14px;
+    }
+
+    .hero-left{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      font-family: var(--accent-font);
+      font-weight:800;
+      letter-spacing:.28em;
+      font-size:12px;
+      text-transform:uppercase;
+      color:var(--ink-soft);
+      margin-bottom:12px;
+      width:fit-content;
+    }
+
+    .brand-title-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .brand-badge{
+      width:58px;
+      height:58px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, #edf9ef, #d7f1dc);
+      font-size:28px;
+      box-shadow: inset 0 0 0 1px rgba(90,40,24,.06), 0 10px 22px rgba(0,0,0,.08);
+      flex:0 0 auto;
+    }
+
+    .hero h1{
+      font-family: var(--heading-font);
+      font-size:clamp(2.35rem, 5vw, 3.2rem);
+      line-height:.95;
+      text-transform:uppercase;
+      letter-spacing:-.04em;
+      margin-bottom:12px;
+      animation: floaty 3.2s ease-in-out infinite;
+    }
+
+    @keyframes floaty{
+      0%,100%{ transform:translateY(0); }
+      50%{ transform:translateY(-6px); }
+    }
+
+    .hero p.lead{
+      font-size:clamp(1rem, 1.6vw, 1.12rem);
+      line-height:1.85;
+      color:#5f4637;
+      max-width:62ch;
+      margin-bottom:18px;
+    }
+
+    .hero-image-container{
+      position:relative;
+      width:100%;
+      height:320px;
+      border-radius:20px;
+      overflow:hidden;
+      box-shadow:0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    .hero-image-container img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      animation:fadeInImageHero 1.2s ease-out forwards;
+      -webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+      mask-image:linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+    }
+
+    @keyframes fadeInImageHero{
       from{
-        opacity: 0;
-        transform: translateY(40px);
+        opacity:0;
+        transform:translateX(30px);
       }
       to{
-        opacity: 1;
-        transform: translateY(0px);
+        opacity:1;
+        transform:translateX(0);
       }
     }
 
-    h1{
-      color: #2e7d32;
-      font-size: 48px;
-      margin-bottom: 12px;
-      animation: flotar 3s infinite ease-in-out;
+    .buttons{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:12px;
     }
 
-    @keyframes flotar{
-      0%{ transform: translateY(0px); }
-      50%{ transform: translateY(-6px); }
-      100%{ transform: translateY(0px); }
+    .btn{
+      appearance:none;
+      border:0;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:16px 20px;
+      border-radius:999px;
+      color:#fff;
+      font-weight:800;
+      font-size:15px;
+      box-shadow:0 10px 20px rgba(0,0,0,.12);
+      cursor:pointer;
+      transition:transform .22s ease, box-shadow .22s ease, opacity .22s ease;
+      position:relative;
+      overflow:hidden;
+      user-select:none;
+      font-family: var(--accent-font);
+      min-height:52px;
+    }
+    .btn::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      left:-120%;
+      width:100%;
+      background:linear-gradient(120deg, transparent, rgba(255,255,255,.28), transparent);
+      transform:skewX(-24deg);
+      transition:left .7s ease;
+    }
+    .btn:hover{ transform:translateY(-3px) scale(1.01); box-shadow:0 14px 28px rgba(0,0,0,.16); }
+    .btn:hover::before{ left:120%; }
+    .btn:active{ transform:translateY(0) scale(.99); }
+
+    .btn-primary{ background:linear-gradient(135deg, #5a2818, #7b412b); }
+    .btn-green{ background:linear-gradient(135deg, var(--green), #6cc46f); }
+    .btn-teal{ background:linear-gradient(135deg, var(--teal), #2ab1a3); }
+    .btn-amber{ background:linear-gradient(135deg, var(--amber), #f3c643); color:#5a2818; }
+    .btn-red{ background:linear-gradient(135deg, var(--red), #ee6666); }
+    .btn-violet{ background:linear-gradient(135deg, var(--violet), #b15ddb); }
+    .btn-soft{ background:rgba(255,255,255,.82); color:var(--ink); border:1px solid rgba(90,40,24,.12); }
+
+    .slide-nav{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+      z-index:10;
+      position:relative;
     }
 
-    p{
-      color: #555;
-      font-size: 18px;
-      margin-bottom: 35px;
+    .chip{
+      border:1px solid rgba(90,40,24,.15);
+      background:rgba(255,255,255,.84);
+      color:var(--ink);
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:800;
+      font-size:13px;
+      cursor:pointer;
+      transition:transform .2s ease, background .2s ease;
+      font-family: var(--accent-font);
+      min-height:40px;
+    }
+    .chip:hover{ transform:translateY(-2px); background:#fff; }
+    .chip.active{ background:#5a2818; color:#fff; border-color:#5a2818; }
+
+    .scroll-hint{
+      margin-top:14px;
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      color:#6e4d3b;
+      font-size:13px;
+      font-weight:700;
+      opacity:.9;
+      font-family: var(--accent-font);
     }
 
-    .button{
-      display: block;
-      width: 100%;
-      text-decoration: none;
-      margin: 18px 0;
-      padding: 22px;
-      border-radius: 20px;
-      font-size: 18px;
-      font-weight: bold;
-      transition: 0.35s ease;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-      position: relative;
-      overflow: hidden;
+    .hero-card-wrap{
+      margin-top:18px;
+      width:100%;
     }
 
-    .button::before{
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -120%;
-      width: 100%;
-      height: 100%;
-      background: rgba(255,255,255,0.25);
-      transform: skewX(-25deg);
-      transition: 0.7s;
+    .hero-card{
+      width:100%;
+      border-radius:34px;
+      background:rgba(255,255,255,.74);
+      box-shadow:0 20px 50px rgba(0,0,0,.16);
+      border:1px solid rgba(255,255,255,.8);
+      padding:18px;
+      backdrop-filter: blur(12px);
+      animation: bob 4s ease-in-out infinite;
     }
 
-    .button:hover::before{
-      left: 130%;
+    @keyframes bob{
+      0%,100%{ transform:translateY(0); }
+      50%{ transform:translateY(-10px); }
     }
 
-    .button:hover{
-      transform: translateY(-5px) scale(1.03);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    .hero-card-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
     }
 
-    .pedido{
-      background: linear-gradient(135deg, #43a047, #66bb6a);
-      color: white;
+    .brand-stack small{
+      display:block;
+      font-family: var(--accent-font);
+      font-size:11px;
+      letter-spacing:.32em;
+      font-weight:800;
+      color:#7b4d3b;
+      margin-bottom:4px;
     }
 
-    .cuestionario{
-      background: linear-gradient(135deg, #00897b, #26a69a);
-      color: white;
+    .brand-stack h2{
+      font-family: var(--heading-font);
+      font-size:clamp(1.8rem, 4vw, 2.4rem);
+      line-height:1;
+      color:#5a2818;
     }
 
-    .correo{
-      background: linear-gradient(135deg, #f9a825, #fbc02d);
-      color: white;
-      cursor: default;
+    .badge{
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, #edf9ef, #d7f1dc);
+      font-size:26px;
+      box-shadow: inset 0 0 0 1px rgba(90,40,24,.06);
+      flex:0 0 auto;
     }
 
-    .youtube{
-      background: linear-gradient(135deg, #d32f2f, #ef5350);
-      color: white;
+    .stage{
+      border-radius:30px;
+      background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,250,245,.88));
+      border:1px solid rgba(90,40,24,.08);
+      box-shadow:0 18px 36px rgba(0,0,0,.10);
+      min-height:0;
+      padding:18px;
+      position:relative;
+      overflow:visible;
+      width:100%;
     }
 
-    .instagram{
-      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-      color: white;
+    .slide-content{
+      width:100%;
+      opacity:0;
+      transform:translateX(40px);
     }
 
-    .footer{
-      margin-top: 30px;
-      color: #777;
-      font-size: 14px;
-      padding-bottom: 10px;
+    .slide-content.anim-next{ animation: slideInNext .38s ease forwards; }
+    .slide-content.anim-prev{ animation: slideInPrev .38s ease forwards; }
+
+    @keyframes slideInNext{
+      from{ opacity:0; transform:translateX(42px); }
+      to{ opacity:1; transform:translateX(0); }
+    }
+    @keyframes slideInPrev{
+      from{ opacity:0; transform:translateX(-42px); }
+      to{ opacity:1; transform:translateX(0); }
     }
 
-    @media (max-width: 768px) {
-      .container {
-        padding: 35px 25px;
-        border-radius: 20px;
+    .slide-panel{
+      width:100%;
+      min-height:0;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .section-title-with-image{
+      width:100%;
+      display:grid;
+      grid-template-columns:1fr 200px;
+      gap:20px;
+      align-items:center;
+      margin-bottom:16px;
+    }
+
+    .section-title-content{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    .section-title-label{
+      font-family: var(--accent-font);
+      font-size:12px;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      font-weight:900;
+      color:#7b4d3b;
+    }
+
+    .section-title-heading{
+      font-family: var(--heading-font);
+      font-size: clamp(1.55rem, 3.4vw, 2.45rem);
+      line-height:1.08;
+      text-transform:uppercase;
+      letter-spacing:-.03em;
+      color:#5a2818;
+    }
+
+    .section-image{
+      position:relative;
+      width:200px;
+      height:200px;
+      overflow:hidden;
+      border-radius:16px;
+      transform:skewY(-3deg);
+      box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .section-image img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      animation:fadeInImageTilt 1.2s ease-out forwards;
+    }
+
+    .section-image.with-fade img{
+      -webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+      mask-image:linear-gradient(90deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+    }
+
+    @keyframes fadeInImageTilt{
+      from{
+        opacity:0;
+        transform:skewY(-3deg) translateX(20px);
       }
-
-      h1 {
-        font-size: 36px;
-        margin-bottom: 10px;
-      }
-
-      p {
-        font-size: 16px;
-        margin-bottom: 25px;
-      }
-
-      .button {
-        padding: 18px;
-        font-size: 16px;
-        margin: 14px 0;
-      }
-
-      body::before {
-        width: 500px;
-        height: 500px;
-        top: -200px;
-        left: -200px;
-      }
-
-      body::after {
-        width: 450px;
-        height: 450px;
-        bottom: -180px;
-        right: -180px;
+      to{
+        opacity:1;
+        transform:skewY(-3deg) translateX(0);
       }
     }
 
-    @media (max-width: 480px) {
-      body{
-        padding: 24px 12px;
-      }
+    .slide-subtitle{
+      color:#6b5142;
+      line-height:1.8;
+      font-size:15px;
+      max-width:70ch;
+    }
 
-      .container {
-        padding: 25px 20px;
-        border-radius: 16px;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-      }
+    .slide-stack,
+    .cards-grid,
+    .problem-list,
+    .timeline,
+    .catalog-grid,
+    .economy-grid,
+    .contact-grid{
+      width:100%;
+    }
 
-      h1 {
-        font-size: 28px;
-        margin-bottom: 8px;
-      }
+    .slide-stack{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin-top:8px;
+    }
 
-      p {
-        font-size: 14px;
-        margin-bottom: 20px;
-      }
+    .mini-card{
+      border-radius:22px;
+      padding:18px;
+      min-height:110px;
+      color:#5a2818;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      text-align:left;
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+      transition:transform .2s ease;
+    }
+    .mini-card:hover{ transform:translateY(-4px); }
 
-      .button {
-        padding: 16px;
-        font-size: 14px;
-        margin: 12px 0;
-        border-radius: 16px;
-      }
+    .mini-card .ico{ font-size:2.4rem; line-height:1; margin-bottom:6px; }
+    .mini-card p{ margin-top:2px; font-weight:700; font-family: var(--accent-font); }
+    .mini-card span{ display:block; margin-top:6px; font-size:13px; line-height:1.5; font-weight:500; opacity:.88; }
 
-      .footer {
-        font-size: 12px;
-        margin-top: 20px;
-      }
+    .mini-fresh{ background:linear-gradient(135deg, #fde6ec, #f6b8c6); }
+    .mini-art{ background:linear-gradient(135deg, #fce9be, #f1c56c); }
+    .mini-order{ background:linear-gradient(135deg, #e5fff6, #bbf0dc); }
+    .mini-eco{ background:linear-gradient(135deg, #edf8dd, #cfeea3); }
 
-      body::before {
-        width: 350px;
-        height: 350px;
-        top: -150px;
-        left: -150px;
-      }
+    .hero-tag{
+      border-radius:20px;
+      padding:14px 16px;
+      background:#5a2818;
+      color:#fff;
+      box-shadow:0 12px 20px rgba(90,40,24,.18);
+      font-weight:700;
+      text-align:center;
+      line-height:1.5;
+      font-family: var(--accent-font);
+    }
 
-      body::after {
-        width: 300px;
-        height: 300px;
-        bottom: -130px;
-        right: -130px;
+    .panel{
+      padding:26px;
+    }
+
+    .panel h2{
+      font-family: var(--heading-font);
+      font-size:clamp(1.9rem, 4vw, 2.8rem);
+      text-transform:uppercase;
+      margin-bottom:10px;
+      line-height:1;
+    }
+
+    .panel .sub{
+      color:#6b5142;
+      line-height:1.8;
+      max-width:80ch;
+      margin-bottom:24px;
+      font-size:15px;
+    }
+
+    .cards-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));
+      gap:14px;
+    }
+
+    .info-card{
+      background:linear-gradient(180deg, #fff, #fff8f1);
+      border-radius:26px;
+      padding:18px;
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+      border:1px solid rgba(90,40,24,.06);
+      min-height:200px;
+    }
+
+    .info-card .icon{ font-size:2rem; }
+    .info-card h3{
+      margin-top:12px;
+      font-size:1.1rem;
+      font-family: var(--heading-font);
+    }
+    .info-card p{ margin-top:10px; color:#6b5142; line-height:1.75; font-size:14px; }
+
+    .two-col{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:16px;
+      margin-top:20px;
+    }
+
+    .box{
+      border-radius:30px;
+      padding:20px;
+      background:rgba(255,255,255,.82);
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+      border:1px solid rgba(90,40,24,.06);
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      min-width:0;
+    }
+
+    .box h3{
+      font-family: var(--heading-font);
+      font-size:1.45rem;
+      margin-bottom:2px;
+      text-transform:uppercase;
+    }
+
+    .box p,
+    .box li{
+      color:#6b5142;
+      line-height:1.8;
+      font-size:15px;
+    }
+
+    .problem-list{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(185px, 1fr));
+      gap:12px;
+      margin-top:8px;
+    }
+
+    .problem-item{
+      border-radius:20px;
+      padding:14px;
+      background:#fff;
+      border:1px solid rgba(90,40,24,.08);
+      box-shadow:0 8px 12px rgba(0,0,0,.05);
+      min-width:0;
+    }
+    .problem-item strong{ display:block; margin-bottom:4px; }
+
+    .timeline{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+      gap:12px;
+      margin-top:8px;
+      align-items:stretch;
+    }
+
+    .step{
+      border-radius:22px;
+      padding:16px;
+      background:#fff;
+      border:1px solid rgba(90,40,24,.08);
+      box-shadow:0 8px 12px rgba(0,0,0,.05);
+      min-height:180px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+    }
+    .step .num{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#5a2818;
+      color:#fff;
+      font-weight:900;
+      margin-bottom:10px;
+      font-family: var(--accent-font);
+    }
+    .step h4{ margin-bottom:8px; font-family: var(--heading-font); }
+    .step p{ line-height:1.7; }
+
+    .catalog-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(210px, 1fr));
+      gap:14px;
+      margin-top:16px;
+    }
+
+    .product-card{
+      border-radius:28px;
+      padding:16px;
+      background:linear-gradient(180deg, #fff, #fff9f4);
+      border:1px solid rgba(90,40,24,.08);
+      box-shadow:0 10px 18px rgba(0,0,0,.08);
+      min-width:0;
+    }
+    .product-thumb{
+      height:150px;
+      border-radius:22px;
+      display:grid;
+      place-items:center;
+      font-size:3.3rem;
+      margin-bottom:14px;
+      background:linear-gradient(135deg, #f6efe7, #fff);
+      border:1px dashed rgba(90,40,24,.16);
+    }
+    .product-card h4{ font-size:1.1rem; margin-bottom:6px; font-family: var(--heading-font); }
+    .product-card p{ color:#6b5142; line-height:1.7; font-size:14px; }
+    .price{
+      margin-top:12px;
+      display:inline-block;
+      padding:9px 12px;
+      border-radius:999px;
+      font-weight:900;
+      background:#5a2818;
+      color:#fff;
+      font-size:13px;
+      font-family: var(--accent-font);
+    }
+
+    .economy-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+      gap:14px;
+      margin-top:16px;
+    }
+    .metric{
+      border-radius:24px;
+      padding:16px;
+      background:#fff;
+      border:1px solid rgba(90,40,24,.08);
+      box-shadow:0 8px 12px rgba(0,0,0,.05);
+      text-align:center;
+    }
+    .metric .val{
+      font-size:2rem;
+      font-weight:900;
+      margin:6px 0 4px;
+      color:#5a2818;
+      font-family: var(--heading-font);
+    }
+    .metric .label{ color:#6b5142; font-size:14px; line-height:1.6; }
+
+    .contact-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .footer-card{
+      text-align:center;
+      padding:18px 12px 0;
+      color:#7b695e;
+      font-size:14px;
+      font-family: var(--accent-font);
+    }
+
+    .section-controls{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:6px;
+    }
+
+    .divider{
+      margin:14px 0 6px;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(90,40,24,.18), transparent);
+    }
+
+    @media (max-width: 1024px){
+      .hero-top{
+        grid-template-columns:1fr;
+        gap:16px;
+      }
+      .hero-image-container{
+        height:250px;
+      }
+    }
+
+    @media (max-width: 900px){
+      .section-title-with-image{
+        grid-template-columns:1fr;
+        gap:14px;
+      }
+      .section-image{
+        width:160px;
+        height:160px;
+      }
+    }
+
+    @media (max-width: 720px){
+      body{ padding:12px 8px 28px; }
+      .section{ border-radius:24px; }
+      .hero{ padding:18px; }
+      .panel{ padding:18px; }
+      .hero-top{ grid-template-columns:1fr; gap:10px; }
+      .brand-title-row{ gap:10px; }
+      .brand-badge{ width:52px; height:52px; font-size:24px; border-radius:16px; }
+      .hero h1{ font-size:clamp(2rem, 9.6vw, 2.95rem); }
+      .hero p.lead{ font-size:14px; margin-bottom:14px; }
+      .buttons,.slide-nav,.section-controls{ flex-direction:column; }
+      .btn,.chip{ width:100%; }
+      .hero-card{ padding:14px; }
+      .hero-card-top{ margin-bottom:10px; }
+      .brand-stack h2{ font-size:clamp(1.55rem, 7vw, 2rem); }
+      .stage{ padding:14px; border-radius:22px; }
+      .slide-panel{ gap:14px; }
+      .section-title-heading{ font-size:clamp(1.35rem, 7vw, 1.9rem); }
+      .slide-subtitle{ font-size:14px; line-height:1.65; }
+      .mini-card{ min-height:auto; padding:14px; }
+      .mini-card .ico{ font-size:2rem; }
+      .mini-card p{ font-size:14px; }
+      .mini-card span{ font-size:12px; }
+      .hero-tag{ font-size:13px; padding:12px 14px; }
+      .cards-grid,.problem-list,.timeline,.catalog-grid,.economy-grid,.contact-grid{ grid-template-columns:1fr; }
+      .two-col{ grid-template-columns:1fr; gap:12px; }
+      .box,.info-card,.product-card,.metric,.problem-item,.step{ padding:14px; }
+      .info-card{ min-height:auto; }
+      .product-thumb{ height:130px; font-size:3rem; }
+      .step{ min-height:auto; }
+      .slide-content{ transform:translateX(16px); }
+      .slide-content.anim-next{ animation: slideInNext .28s ease forwards; }
+      .slide-content.anim-prev{ animation: slideInPrev .28s ease forwards; }
+      .section-title-with-image{ grid-template-columns:1fr; }
+      .section-image{ width:120px; height:120px; }
+      .hero-image-container{ height:200px; }
+    }
+
+    @media (max-width: 480px){
+      .section-title-with-image{
+        grid-template-columns:1fr;
+        gap:12px;
+      }
+      .section-image{
+        width:100px;
+        height:100px;
+        transform:skewY(-2deg);
+      }
+      .hero-image-container{
+        height:180px;
       }
     }
   </style>
 </head>
 <body>
+  <main class="page">
+    <section class="section hero" id="inicio">
+      <div class="hero-top">
+        <div class="hero-left">
+          <div class="eyebrow"><span>✦</span><span>VITAVA ECOSNACK</span></div>
+          <div class="brand-title-row">
+            <h1 id="heroTitle">Presentación del emprendimiento</h1>
+            <div class="brand-badge" aria-hidden="true">🍪</div>
+          </div>
+          <p class="lead" id="heroSubtitle">Un emprendimiento escolar que combina identidad regional, nutrición y una presentación moderna para una experiencia atractiva y ordenada.</p>
+          <div class="buttons">
+            <a class="btn btn-primary" href="https://goo.su/rzTL" target="_blank" rel="noreferrer">MÁS INFORMACIÓN ↗</a>
+          </div>
+          <div class="slide-nav" id="slideNav" aria-label="Navegación de secciones"></div>
+          <div class="scroll-hint">⬇ Desliza para conocer el proyecto</div>
+        </div>
+        <div class="hero-image-container">
+          <img id="heroImage" src="https://i.imgur.com/QsqZuq8.png" alt="Presentación del emprendimiento">
+        </div>
+      </div>
 
-  <div class="container">
-    <h1>🌱 Vitava EcoSnack</h1>
+      <div class="hero-card-wrap">
+        <div class="hero-card" aria-live="polite">
+          <div class="hero-card-top">
+            <div class="brand-stack">
+              <small>VITAVA</small>
+              <h2>EcoSnack</h2>
+            </div>
+            <div class="badge" id="heroEmoji">🌱</div>
+          </div>
+          <div class="stage">
+            <div class="slide-content" id="slideContent"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-    <p>Snacks saludables, artesanales y ecológicos</p>
+  <script>
+    const slides = [
+      {
+        label: 'Sección 1',
+        title: 'Presentación del emprendimiento',
+        subtitle: 'Una introducción clara al proyecto, su identidad escolar y su propósito general dentro de la comunidad educativa.',
+        emoji: '🌱',
+        image: 'https://i.imgur.com/QsqZuq8.png',
+        html: `
+          <div class="slide-panel">
+            <div class="section-title-with-image">
+              <div class="section-title-content">
+                <div class="section-title-label">SECCIÓN 1</div>
+                <h3 class="section-title-heading">Presentación del emprendimiento</h3>
+              </div>
+              <div class="section-image with-fade">
+                <img src="https://i.imgur.com/QsqZuq8.png" alt="Sección 1">
+              </div>
+            </div>
+            <p class="slide-subtitle">Emprendimiento escolar con identidad propia, enfoque moderno y una base regional que conecta con la realidad de la institución y la comunidad educativa.</p>
+            <div class="slide-stack">
+              <div class="mini-card mini-fresh"><div class="ico">🏫</div><p>Presentación</p><span>Emprendimiento escolar con identidad propia y enfoque moderno.</span></div>
+              <div class="mini-card mini-order"><div class="ico">🍇</div><p>Base regional</p><span>Uso de la uva pasa y referencia a recursos de Ica.</span></div>
+              <div class="mini-card mini-eco"><div class="ico">🌿</div><p>Conciencia</p><span>Nutrición, ambiente y orden como parte del proyecto.</span></div>
+              <div class="mini-card mini-art"><div class="ico">✨</div><p>Estilo visual</p><span>Diseño elegante con espacio para futuras imágenes.</span></div>
+            </div>
+            <div class="hero-tag">Portada del proyecto: identidad, sabor y presentación profesional.</div>
+            <div class="section-controls"><button class="btn btn-soft" data-goto="1" type="button">SIGUIENTE SECCIÓN →</button></div>
+          </div>
+        `
+      },
+      {
+        label: 'Sección 2',
+        title: 'El problema identificado',
+        subtitle: 'Una mirada precisa a la mala alimentación, el desorden en recreo, la accesibilidad limitada y los residuos por empaques.',
+        emoji: '⚠️',
+        image: 'https://i.imgur.com/i8w9RXh.jpeg',
+        html: `
+          <div class="slide-panel">
+            <div class="section-title-with-image">
+              <div class="section-title-content">
+                <div class="section-title-label">SECCIÓN 2</div>
+                <h3 class="section-title-heading">El problema identificado</h3>
+              </div>
+              <div class="section-image">
+                <img src="https://i.imgur.com/i8w9RXh.jpeg" alt="Sección 2">
+              </div>
+            </div>
+            <p class="slide-subtitle">Durante los recreos se identifica un consumo frecuente de snacks ultraprocesados, acompañado de filas desordenadas, atención lenta en momentos de alta demanda y poca variedad de productos saludables.</p>
+            <div class="two-col">
+              <div class="box">
+                <h3>Problemas observados</h3>
+                <div class="problem-list">
+                  <div class="problem-item"><strong>🍟 Mala alimentación</strong>El consumo diario de ultraprocesados afecta la calidad de la dieta escolar.</div>
+                  <div class="problem-item"><strong>🚶 Desorden en recreo</strong>Las filas y la compra no siempre mantienen un orden adecuado.</div>
+                  <div class="problem-item"><strong>💸 Accesibilidad limitada</strong>No todos los productos son económicos ni fáciles de adquirir.</div>
+                  <div class="problem-item"><strong>♻️ Residuos por empaques</strong>El uso de envolturas desechables incrementa la basura escolar.</div>
+                </div>
+              </div>
+              <div class="box">
+                <h3>¿En qué desemboca?</h3>
+                <p>El diagnóstico muestra una necesidad concreta: ofrecer una experiencia de compra más ordenada y una alternativa alimenticia más saludable y accesible. Desde ahí se justifica la propuesta Vitava EcoSnack como respuesta a un problema real.</p>
+                <div class="divider"></div>
+                <div class="timeline">
+                  <div class="step"><div class="num">1</div><h4>Observar</h4><p>Identificar las dificultades del entorno escolar.</p></div>
+                  <div class="step"><div class="num">2</div><h4>Analizar</h4><p>Reconocer necesidades, causas y consecuencias.</p></div>
+                  <div class="step"><div class="num">3</div><h4>Definir</h4><p>Precisar por qué el problema sí merece una solución.</p></div>
+                  <div class="step"><div class="num">4</div><h4>Actuar</h4><p>Plantear una propuesta viable y atractiva.</p></div>
+                </div>
+              </div>
+            </div>
+            <div class="section-controls"><button class="btn btn-soft" data-goto="0" type="button">← SECCIÓN 1</button><button class="btn btn-soft" data-goto="2" type="button">SECCIÓN 3 →</button></div>
+          </div>
+        `
+      },
+      {
+        label: 'Sección 3',
+        title: 'La solución y la propuesta',
+        subtitle: 'La alternativa Vitava EcoSnack: productos caseros, saludables, accesibles, con empaque ecológico y valor local.',
+        emoji: '🍪',
+        image: 'https://i.imgur.com/cyi1xRL.png',
+        html: `
+          <div class="slide-panel">
+            <div class="section-title-with-image">
+              <div class="section-title-content">
+                <div class="section-title-label">SECCIÓN 3</div>
+                <h3 class="section-title-heading">La solución y la propuesta</h3>
+              </div>
+              <div class="section-image with-fade">
+                <img src="https://i.imgur.com/cyi1xRL.png" alt="Sección 3">
+              </div>
+            </div>
+            <p class="slide-subtitle">Snacks caseros y ecológicos con ingredientes fáciles de conseguir, una presentación atractiva y precios accesibles para el público escolar.</p>
+            <div class="cards-grid">
+              <div class="info-card"><div class="icon">🌿</div><h3>Solución</h3><p>Snacks caseros y ecológicos con ingredientes fáciles de conseguir.</p></div>
+              <div class="info-card"><div class="icon">🍪</div><h3>Producto principal</h3><p>Galletas de avena con uva pasa y mini queques nutritivos.</p></div>
+              <div class="info-card"><div class="icon">♻️</div><h3>Empaque</h3><p>Materiales reciclados o biodegradables para reducir residuos.</p></div>
+              <div class="info-card"><div class="icon">💰</div><h3>Viabilidad</h3><p>Bajos costos iniciales y precios accesibles para el público escolar.</p></div>
+            </div>
+            <div class="catalog-grid">
+              <div class="product-card"><div class="product-thumb">🍪</div><h4>Galleta de avena con uva pasa</h4><p>La opción principal del proyecto: casera, sencilla y con identidad regional.</p><span class="price">S/ 4.00</span></div>
+              <div class="product-card"><div class="product-thumb">🧁</div><h4>Mini queque nutritivo</h4><p>Ideal para vender en recreos, ferias o pedidos por lote.</p><span class="price">S/ 4.00</span></div>
+              <div class="product-card"><div class="product-thumb">🍌</div><h4>Variante saludable</h4><p>Una alternativa para ampliar el catálogo sin perder la idea artesanal.</p><span class="price">S/ 4.50</span></div>
+            </div>
+            <div class="economy-grid">
+              <div class="metric"><div class="icon">💵</div><div class="val">S/ 60</div><div class="label">Inversión aproximada por tanda</div></div>
+              <div class="metric"><div class="icon">📦</div><div class="val">24</div><div class="label">Paquetes estimados por tanda</div></div>
+              <div class="metric"><div class="icon">💰</div><div class="val">S/ 96</div><div class="label">Ingresos aproximados por tanda</div></div>
+              <div class="metric"><div class="icon">📈</div><div class="val">S/ 36</div><div class="label">Ganancia estimada por tanda</div></div>
+            </div>
+            <div class="section-controls"><button class="btn btn-soft" data-goto="1" type="button">← SECCIÓN 2</button><button class="btn btn-soft" data-goto="3" type="button">SECCIÓN 4/CONTACTO →</button></div>
+          </div>
+        `
+      },
+      {
+        label: 'Sección 4/Contacto',
+        title: 'Contactos y enlaces',
+        subtitle: 'Botones para pedidos, cuestionario, correo y redes sociales para mantener la portada limpia y elegante.',
+        emoji: '📷',
+        image: 'https://i.imgur.com/tYqpAs4.jpeg',
+        html: `
+          <div class="slide-panel">
+            <div class="section-title-with-image">
+              <div class="section-title-content">
+                <div class="section-title-label">SECCIÓN 4 / CONTACTO</div>
+                <h3 class="section-title-heading">Contactos y enlaces</h3>
+              </div>
+              <div class="section-image with-fade">
+                <img src="https://i.imgur.com/tYqpAs4.jpeg" alt="Sección 4">
+              </div>
+            </div>
+            <p class="slide-subtitle">Botones para pedidos, cuestionario, correo y redes sociales para mantener la portada limpia y elegante.</p>
+            <div class="contact-grid">
+              <a class="btn btn-green" href="https://goo.su/LEgPCP" target="_blank" rel="noreferrer">🛒 Pedido</a>
+              <a class="btn btn-teal" href="https://goo.su/a8wctdz" target="_blank" rel="noreferrer">📋 Cuestionario</a>
+              <div class="btn btn-amber" title="vitavaecosnack@gmail.com">📧 Correo</div>
+              <a class="btn btn-red" href="https://goo.su/q0TIP" target="_blank" rel="noreferrer">▶ YouTube</a>
+              <a class="btn btn-violet" href="https://goo.su/62UWE" target="_blank" rel="noreferrer">📷 Instagram</a>
+            </div>
+            <div class="section-controls"><button class="btn btn-soft" data-goto="2" type="button">← SECCIÓN 3</button><button class="btn btn-soft" data-goto="0" type="button">VOLVER AL INICIO</button></div>
+          </div>
+        `
+      }
+    ];
 
-    <a class="button pedido"
-       href="https://goo.su/LEgPCP"
-       target="_blank">
-      🛒 Haga su pedido aquí, una vez finalice, lo sabremos al instante.
-    </a>
+    const slideNav = document.getElementById('slideNav');
+    const slideContent = document.getElementById('slideContent');
+    const heroTitle = document.getElementById('heroTitle');
+    const heroSubtitle = document.getElementById('heroSubtitle');
+    const heroEmoji = document.getElementById('heroEmoji');
+    const heroImage = document.getElementById('heroImage');
 
-    <a class="button cuestionario"
-       href="https://goo.su/a8wctdz"
-       target="_blank">
-      📋 He aquí un cuestionario para apoyarnos con más datos para analizar y ayudarnos a mejorar nuestro proyecto
-    </a>
+    let active = 0;
+    let audioCtx = null;
 
-    <div class="button correo" title="vitavaecosnack@gmail.com">
-      📧 vitavaecosnack@gmail.com
-    </div>
+    function playTapSound(){
+      try{
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if(!AudioContextClass) return;
+        if(!audioCtx) audioCtx = new AudioContextClass();
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, now);
+        osc.frequency.exponentialRampToValueAtTime(420, now + 0.06);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.exponentialRampToValueAtTime(0.05, now + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.13);
+      }catch(_e){}
+    }
 
-    <a class="button youtube"
-       href="https://goo.su/q0TIP"
-       target="_blank">
-      ▶ Nuestro canal de Youtube
-    </a>
+    function attachHandlers(){
+      slideContent.querySelectorAll('[data-goto]').forEach((btn) => {
+        btn.addEventListener('pointerdown', playTapSound, { passive:true });
+        btn.addEventListener('click', () => {
+          const target = Number(btn.getAttribute('data-goto'));
+          goto(target);
+        });
+      });
+      slideContent.querySelectorAll('a.btn').forEach((a) => {
+        a.addEventListener('pointerdown', playTapSound, { passive:true });
+      });
+    }
 
-    <a class="button instagram"
-       href="https://goo.su/62UWE"
-       target="_blank">
-      📷 Nuestra cuenta de Instagram
-    </a>
+    function renderSection(index, direction = 'next'){
+      const s = slides[index];
+      heroTitle.textContent = s.title;
+      heroSubtitle.textContent = s.subtitle;
+      heroEmoji.textContent = s.emoji;
+      heroImage.src = s.image;
+      heroImage.alt = s.title;
+      [...slideNav.children].forEach((btn, i) => btn.classList.toggle('active', i === index));
+      slideContent.classList.remove('anim-next', 'anim-prev');
+      slideContent.innerHTML = s.html;
+      void slideContent.offsetWidth;
+      slideContent.classList.add(direction === 'prev' ? 'anim-prev' : 'anim-next');
+      attachHandlers();
+    }
 
-    <div class="footer">
-      Vitava EcoSnack © 2026
-    </div>
-  </div>
+    function goto(index){
+      const direction = index < active ? 'prev' : 'next';
+      active = index;
+      renderSection(active, direction);
+    }
 
+    slides.forEach((s, index) => {
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip' + (index === 0 ? ' active' : '');
+      chip.textContent = s.label;
+      chip.addEventListener('pointerdown', playTapSound, { passive:true });
+      chip.addEventListener('click', () => goto(index));
+      slideNav.appendChild(chip);
+    });
+
+    renderSection(0, 'next');
+  </script>
 </body>
 </html>
